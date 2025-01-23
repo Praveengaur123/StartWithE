@@ -1,30 +1,24 @@
-const path=require('path')
+const express = require('express');
+const app = express();
 
-const express =require('express')
+// Middleware 1
+app.use((req, res, next) => {
+  console.log('Middleware 1 executed');
+  next(); 
+});
 
-const bodyParser=require('body-parser')
+// Middleware 2
+app.use((req, res, next) => {
+  console.log('Middleware 2 executed');
+  next(); 
+});
 
-const cors=require('cors')
+// Default Route
+app.get('/', (req, res) => {
+  res.send('<h1>Hello to Node.js</h1>');
+});
 
-const adminRoute=require('./route/admin')
-const sequelize=require('./util/database')
-
-const app=express()
-
-app.use(cors())
-
-app.use(bodyParser.urlencoded({extended:false}))
-app.use(bodyParser.json())
-
-app.use(express.static(path.join(__dirname,'public')))
-app.use(adminRoute)
-
-
-sequelize.sync()
-.then(result=>{
-    console.log("Server Start at 5051")
-    app.listen(5051)
-})
-.catch(err=>{
-    console.log(err)
-})
+// Start Server
+app.listen(3000, () => {
+  console.log('Server is on port 3000');
+});
